@@ -27,36 +27,36 @@ typedef struct{
     int top;
 }Stack;
 
-// Função para inicializar a pilha
+// FunÃ§Ã£o para inicializar a pilha
 void initialize_stack(Stack* s){
     s->top = -1;
 }
 
-// Função para verificar se a pilha esta vazia
+// FunÃ§Ã£o para verificar se a pilha esta vazia
 bool is_stack_empty(Stack* s){
     return s->top == -1;
 }
 
-// Função para verificar se a pilha esta cheia
+// FunÃ§Ã£o para verificar se a pilha esta cheia
 bool is_stack_full(Stack* s){
     return s->top == MAX_STACK_SIZE - 1;
 }
 
-// Função para adicionar um item a pilha
+// FunÃ§Ã£o para adicionar um item a pilha
 bool push(Stack* s, Projectile p){
     if (is_stack_full(s)) return false;
     s->stack[++s->top] = p;
     return true;
 }
 
-// Função para remover um item da pilha
+// FunÃ§Ã£o para remover um item da pilha
 bool pop(Stack* s, Projectile* p){
     if (is_stack_empty(s)) return false;
     *p = s->stack[s->top--];
     return true;
 }
 
-// Função para inicializar o mapa
+// FunÃ§Ã£o para inicializar o mapa
 void initialize_map(const char* filename){
     FILE* file = fopen(filename, "r");
     if (!file) {
@@ -73,14 +73,14 @@ void initialize_map(const char* filename){
     fclose(file);
 }
 
-// Função para desenhar o mapa
+// FunÃ§Ã£o para desenhar o mapa
 void draw_map(ALLEGRO_BITMAP* map_image){
     al_draw_bitmap(map_image, 0, 0, 0);
 }
 
 
 
-// Função para adicionar um projetil
+// FunÃ§Ã£o para adicionar um projetil
 void shoot_projectile(int x, int y, int dx, int dy, Stack* s){
     if (is_stack_full(s)) return;
 
@@ -93,7 +93,7 @@ void shoot_projectile(int x, int y, int dx, int dy, Stack* s){
     push(s, p);
 }
 
-// Função para atualizar os projeteis
+// FunÃ§Ã£o para atualizar os projeteis
 bool update_projectiles(int player1_x, int player1_y, Stack* s){
     Stack temp_stack;
     initialize_stack(&temp_stack);
@@ -130,7 +130,7 @@ bool update_projectiles(int player1_x, int player1_y, Stack* s){
     return hit;
 }
 
-// Função para desenhar os projeteis
+// FunÃ§Ã£o para desenhar os projeteis
 void draw_projectiles(Stack* s){
     Stack temp_stack;
     initialize_stack(&temp_stack);
@@ -140,7 +140,7 @@ void draw_projectiles(Stack* s){
         pop(s, &p);
 
         if (p.active) {
-            al_draw_filled_circle(p.x, p.y, 5, al_map_rgb(255, 0, 0)); // Projétil vermelho
+            al_draw_filled_circle(p.x, p.y, 5, al_map_rgb(255, 0, 0)); // ProjÃ©til vermelho
             push(&temp_stack, p);
         }
     }
@@ -163,7 +163,7 @@ int main() {
     al_init_acodec_addon();    // Inicializa os codecs de audio
     initialize_map("mapa.txt");
 
-    // Reserve canais de áudio
+    // Reserve canais de Ã¡udio
     al_reserve_samples(1);
 
     ALLEGRO_TIMER* timer = al_create_timer(1.0 / 60.0); // 60 FPS
@@ -229,7 +229,7 @@ int main() {
             if (n2 % 12 == 0)
                 si2 = (si2 + 1) % 5;
 
-            // Atualiza os projéteis
+            // Atualiza os projÃ©teis
             if (update_projectiles(x1, y1, &projectile_stack)) {
                 // Se um projetil atingiu o jogador 1, encerra o jogo
                 printf("GAME OVER! ATINGIDO NO JOELHO!\n");
@@ -263,7 +263,7 @@ int main() {
         if (keys[ALLEGRO_KEY_W])
             move_player(&x2, &y2, 0, -2);
 
-        // Controles para disparar projéteis (por exemplo, com a tecla 'F')
+        // Controles para disparar projÃ©teis (por exemplo, com a tecla 'F')
         if (keys[ALLEGRO_KEY_F]) {
             shoot_projectile(x2 + 16, y2 + 16, 2, 0, &projectile_stack); // Dispara o projetil para a direita
             keys[ALLEGRO_KEY_F] = false; // Impede multiplos disparos
@@ -272,13 +272,13 @@ int main() {
         if (keys[ALLEGRO_KEY_ESCAPE])
             break;
 
-        // Verificação de colisao entre os jogadores
+        // VerificaÃ§Ã£o de colisao entre os jogadores
         if (check_collision(x1, y1, x2, y2)) {
             printf("GAME OVER! \n");
             break;
         }
 
-        // Verificação de vitoria por tempo
+        // VerificaÃ§Ã£o de vitoria por tempo
         if (time_survived >= 25.0) {
             printf("PARABENS VOCE VENCEU!!!!!\n");
             break;
